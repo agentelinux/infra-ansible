@@ -45,8 +45,8 @@ servers=[
     :hostname => "ansible." + "#{DOMAIN}",
     :ip => "#{BRIDGE_NET}" + "155",
     :ram => "#{RAM}",
-	:install_ansible => "./artefacts/scripts/install_ansible.sh", 
-	:config_ansible => "./artefacts/scripts/config_ansible.sh",
+	:install_ansible => "/vagrant/artefacts/scripts/install_ansible.sh", 
+	:config_ansible => "/vagrant/artefacts/scripts/config_ansible.sh",
 	:source =>  "./artefacts/.",
 	:destination => "/home/vagrant/"
   }
