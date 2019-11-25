@@ -53,7 +53,7 @@ servers=[
 ]
  
 Vagrant.configure(2) do |config|
-    config.vm.synced_folder ".", vconfig['vagrant_directory'], :mount_options => ["dmode=777", "fmode=666"]
+    config.vm.synced_folder ".", vconfig['vagrant_directory'], :mount_options => ["dmode=777", "fmode=755"]
     servers.each do |machine|
         config.vm.define machine[:hostname] do |node|
 			node.vm.box = vconfig['vagrant_box']

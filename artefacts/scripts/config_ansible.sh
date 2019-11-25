@@ -51,23 +51,23 @@ echo "[gitlab]" | sudo tee -a /etc/ansible/hosts
 echo "gitlab.sample.com" | sudo tee -a /etc/ansible/hosts
 
 #cat /etc/ansible/hosts
-dos2unix ~/artefacts/scripts/ssh_pass.sh
-chmod +x ~/artefacts/scripts/ssh_pass.sh
+dos2unix /vagrant/artefacts/scripts/ssh_pass.sh
+chmod +x /vagrant/artefacts/scripts/ssh_pass.sh
 #chown vagrant:vagrant ssh_pass.sh 
 
 # password less authentication using expect scripting language
-~/artefacts/scripts/ssh_pass.sh $USER $PASSWORD "ansible.sample.com" 
-~/artefacts/scripts/ssh_pass.sh $USER $PASSWORD "nfsclient.sample.com" 
-~/artefacts/scripts/ssh_pass.sh $USER $PASSWORD "nfsserver.sample.com" 
-~/artefacts/scripts/ssh_pass.sh $USER $PASSWORD "docker.sample.com" 
-~/artefacts/scripts/ssh_pass.sh $USER $PASSWORD "jenkins.sample.com"
-~/artefacts/scripts/ssh_pass.sh $USER $PASSWORD "gitlab.sample.com"
+/vagrant/artefacts/scripts/ssh_pass.sh $USER $PASSWORD "ansible.sample.com" 
+/vagrant/artefacts/scripts/ssh_pass.sh $USER $PASSWORD "nfsclient.sample.com" 
+/vagrant/artefacts/scripts/ssh_pass.sh $USER $PASSWORD "nfsserver.sample.com" 
+/vagrant/artefacts/scripts/ssh_pass.sh $USER $PASSWORD "docker.sample.com" 
+/vagrant/artefacts/scripts/ssh_pass.sh $USER $PASSWORD "jenkins.sample.com"
+/vagrant/artefacts/scripts/ssh_pass.sh $USER $PASSWORD "gitlab.sample.com"
 
-ansible-playbook ~/artefacts/playbooks/nfs_server.yaml
-ansible-playbook ~/artefacts/playbooks/nfs_clients.yaml
-ansible-playbook ~/artefacts/playbooks/install_java.yaml
-ansible-playbook ~/artefacts/playbooks/install_jenkins.yaml
-ansible-playbook ~/artefacts/playbooks/install_docker.yaml
-ansible-playbook ~/artefacts/playbooks/install_gitlab.yaml
+ansible-playbook /vagrant/artefacts/playbooks/nfs_server.yaml
+ansible-playbook /vagrant/artefacts/playbooks/nfs_clients.yaml
+ansible-playbook /vagrant/artefacts/playbooks/install_java.yaml
+ansible-playbook /vagrant/artefacts/playbooks/install_jenkins.yaml
+ansible-playbook /vagrant/artefacts/playbooks/install_docker.yaml
+ansible-playbook /vagrant/artefacts/playbooks/install_gitlab.yaml
 
 

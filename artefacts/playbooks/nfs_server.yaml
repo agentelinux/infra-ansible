@@ -6,7 +6,7 @@
   vars:
     mountable_share_drive: '/dev/sda1'   
     nfsexport: /share
-    src_exports: ~/artefacts/templates/exports.j2
+    src_exports: /vagrant/artefacts/templates/exports.j2
     #nfsserver: hostvars[inventory_hostname]['facter_ipaddress_eth1'] #192.168.99.150
    
   tasks:

@@ -22,11 +22,11 @@ apt-get install tree -y
 # Cleanup unneded packages
 apt-get -y autoremove
 
-# Adjust timezone to be Singapore
-ln -sf /usr/share/zoneinfo/Asia/Singapore /etc/localtime
+# Adjust timezone to be Zurich
+ln -sf /usr/share/zoneinfo/Europe/Zurich /etc/localtime
 
 # add user to sudo groups
-# usermod -aG sudo vagrant
+usermod -aG sudo vagrant
 
 # lsb_release -a
 
