@@ -6,4 +6,5 @@ vagrant_memory: 4096
 vagrant_directory: /vagrant
 vagrant_cpu: 2
 vagrant_box_check_update: false
-vagrant_domain_name: sample.com
+vagrant_domain_name: sample.test
+vagrant_dns_tld: test 

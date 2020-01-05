@@ -14,6 +14,7 @@ vconfig = YAML::load_file("#{config_nodes}")
 BRIDGE_NET = vconfig['vagrant_ip']
 DOMAIN = vconfig['vagrant_domain_name']
 RAM = vconfig['vagrant_memory']
+TLD = vconfig['vagrant_dns_tld']
 
 servers=[
   {
@@ -54,27 +55,31 @@ servers=[
  
 Vagrant.configure(2) do |config|
     config.vm.synced_folder ".", vconfig['vagrant_directory'], :mount_options => ["dmode=777", "fmode=755"]
-    servers.each do |machine|
+      servers.each do |machine|
         config.vm.define machine[:hostname] do |node|
-			node.vm.box = vconfig['vagrant_box']
-			node.vm.box_version = vconfig['vagrant_box_version']
-			node.vm.hostname = machine[:hostname]
-            node.vm.network "private_network", ip: machine[:ip] 
-            node.vm.provider "virtualbox" do |vb|
-                vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-				vb.cpus = vconfig['vagrant_cpu']
-				vb.memory = machine[:ram]
-                vb.name = machine[:hostname]
-                if (!machine[:install_ansible].nil?)
-                  if File.exist?(machine[:install_ansible])
-					node.vm.provision :shell, path: machine[:install_ansible]
-                  end
-                  if File.exist?(machine[:config_ansible])
-					node.vm.provision :file, source: machine[:source] , destination: machine[:destination]
-      			    node.vm.provision :shell, privileged: false, path: machine[:config_ansible]
-                  end
-                end
-            end
+          node.dns.tld = TLD
+          node.dns.patterns = machine[:hostname]
+        node.vm.box = vconfig['vagrant_box']
+        node.vm.box_version = vconfig['vagrant_box_version']
+        node.vm.hostname = machine[:hostname]
+        node.vm.network "private_network", ip: machine[:ip] 
+        node.vm.provider "virtualbox" do |vb,override|
+          vb.gui = false
+          vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+          vb.cpus = vconfig['vagrant_cpu']
+          vb.memory = machine[:ram]
+          vb.name = machine[:hostname]
+          override.vm.synced_folder ".", "/vagrant", type: "virtualbox", SharedFoldersEnableSymlinksCreate: false
+        if (!machine[:install_ansible].nil?)
+          if File.exist?(machine[:install_ansible])
+            node.vm.provision :shell, path: machine[:install_ansible]
+          end
+          if File.exist?(machine[:config_ansible])
+              node.vm.provision :file, source: machine[:source] , destination: machine[:destination]
+              node.vm.provision :shell, privileged: false, path: machine[:config_ansible]
+          end
         end
+      end
     end
+  end
 end
