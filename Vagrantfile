@@ -45,41 +45,43 @@ servers=[
   {
     :hostname => "ansible." + "#{DOMAIN}",
     :ip => "#{BRIDGE_NET}" + "155",
-    :ram => "#{RAM}",
-	:install_ansible => "/vagrant/artefacts/scripts/install_ansible.sh", 
-	:config_ansible => "/vagrant/artefacts/scripts/config_ansible.sh",
-	:source =>  "./artefacts/.",
-	:destination => "/home/vagrant/"
+    :ram => 1024,
+    :install_ansible => "#{dir}/artefacts/scripts/install_ansible.sh", 
+    :config_ansible => "#{dir}/artefacts/scripts/config_ansible.sh",
+    :source =>  "#{dir}/artefacts/.",
+    :destination => "/home/vagrant/"
   }
 ]
  
 Vagrant.configure(2) do |config|
-    config.vm.synced_folder ".", vconfig['vagrant_directory'], :mount_options => ["dmode=777", "fmode=755"]
-      servers.each do |machine|
-        config.vm.define machine[:hostname] do |node|
-          node.dns.tld = TLD
-          node.dns.patterns = machine[:hostname]
-        node.vm.box = vconfig['vagrant_box']
-        node.vm.box_version = vconfig['vagrant_box_version']
-        node.vm.hostname = machine[:hostname]
-        node.vm.network "private_network", ip: machine[:ip] 
-        node.vm.provider "virtualbox" do |vb,override|
-          vb.gui = false
-          vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-          vb.cpus = vconfig['vagrant_cpu']
-          vb.memory = machine[:ram]
-          vb.name = machine[:hostname]
-          override.vm.synced_folder ".", "/vagrant", type: "virtualbox", SharedFoldersEnableSymlinksCreate: false
-        if (!machine[:install_ansible].nil?)
-          if File.exist?(machine[:install_ansible])
-            node.vm.provision :shell, path: machine[:install_ansible]
-          end
-          if File.exist?(machine[:config_ansible])
-              node.vm.provision :file, source: machine[:source] , destination: machine[:destination]
-              node.vm.provision :shell, privileged: false, path: machine[:config_ansible]
-          end
+  config.vm.synced_folder ".", vconfig['vagrant_directory'], :mount_options => ["dmode=777", "fmode=755"]
+  servers.each do |machine|
+    config.vm.define machine[:hostname] do |node|
+      node.dns.tld = TLD
+      node.dns.patterns = machine[:hostname]
+      node.vm.box = vconfig['vagrant_box']
+      node.vm.box_version = vconfig['vagrant_box_version']
+      node.vm.hostname = machine[:hostname]
+      node.vm.network "private_network", ip: machine[:ip] 
+      node.vm.provider "virtualbox" do |vb,override|
+        vb.gui = false
+        vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+        vb.cpus = vconfig['vagrant_cpu']
+        vb.memory = machine[:ram]
+        vb.name = machine[:hostname]
+      end
+
+      if (!machine[:install_ansible].nil?) then
+        if File.exist? machine[:install_ansible].to_s then
+          node.vm.provision :shell, path: machine[:install_ansible]
+        end
+
+        if File.exist? machine[:config_ansible].to_s then
+            node.vm.provision :file, source: machine[:source] , destination: machine[:destination]
+            node.vm.provision :shell, privileged: false, path: machine[:config_ansible]
         end
       end
+
     end
   end
 end
