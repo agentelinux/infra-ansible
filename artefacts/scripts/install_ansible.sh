@@ -34,6 +34,12 @@ usermod -aG sudo vagrant
 echo "vagrant        ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers
 sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
 
+# Change to enable any user
+#sed -i "s/.*PasswordAuthentication.*/PasswordAuthentication yes/g" /etc/ssh/sshd_config
+
+# Restart sshd
+#service restart ssh
+
 # Disable daily apt unattended updates.
 #echo 'APT::Periodic::Enable "0";' >> /etc/apt/apt.conf.d/10periodic
 

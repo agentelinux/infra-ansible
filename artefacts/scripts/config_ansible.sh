@@ -63,6 +63,7 @@ chmod +x /vagrant/artefacts/scripts/ssh_pass.sh
 /vagrant/artefacts/scripts/ssh_pass.sh $USER $PASSWORD "jenkins.sample.test"
 /vagrant/artefacts/scripts/ssh_pass.sh $USER $PASSWORD "gitlab.sample.test"
 
+ansible-playbook /vagrant/artefacts/playbooks/sshd.yaml
 ansible-playbook /vagrant/artefacts/playbooks/nfs_server.yaml
 ansible-playbook /vagrant/artefacts/playbooks/nfs_clients.yaml
 ansible-playbook /vagrant/artefacts/playbooks/install_java.yaml
