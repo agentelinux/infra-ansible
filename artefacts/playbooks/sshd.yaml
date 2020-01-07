@@ -4,7 +4,7 @@
   become: true
   
   vars:
-    sshd_config: /vagrant/artefacts/templates/exports.j2
+    sshd_config: /etc/ssh/sshd_config
 
   tasks:
     - name: Run update sshd_config
