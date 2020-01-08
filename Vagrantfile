@@ -18,52 +18,20 @@ TLD = vconfig['vagrant_dns_tld']
 
 servers=[
   {
-    :hostname => "nfsserver." + "#{DOMAIN}",
-    :ip => "#{BRIDGE_NET}" + "150",
-    :ram => 1024,
-    :sshd_config => "#{dir}/artefacts/scripts/sshd_config.sh"
-  },
-  {
-    :hostname => "nfsclient." + "#{DOMAIN}",
-    :ip => "#{BRIDGE_NET}" + "151",
-    :ram => 1024,
-    :sshd_config => "#{dir}/artefacts/scripts/sshd_config.sh"    
-  },
-  {
-    :hostname => "docker." + "#{DOMAIN}",
-    :ip => "#{BRIDGE_NET}" + "152",
-    :ram => 2048,
-    :sshd_config => "#{dir}/artefacts/scripts/sshd_config.sh"    
-  },
-  {
-    :hostname => "jenkins." + "#{DOMAIN}",
-    :ip => "#{BRIDGE_NET}" + "153",
-    :ram => "#{RAM}",
-    :sshd_config => "#{dir}/artefacts/scripts/sshd_config.sh",    
-    :guest_j => 80,
-    :host_j => 8080,
-    :sguest_j => 443,
-    :shost_j => 8443 
-  },
-  {
-    :hostname => "gitlab." + "#{DOMAIN}",
-    :ip => "#{BRIDGE_NET}" + "154",
-    :ram => "#{RAM}",
-    :sshd_config => "#{dir}/artefacts/scripts/sshd_config.sh", 
-    :guest_g => 80,
-    :host_g => 9080,
-    :sguest_g => 443,
-    :shost_g => 9443 
-  },
-  {
     :hostname => "ansible." + "#{DOMAIN}",
     :ip => "#{BRIDGE_NET}" + "155",
-    :ram => 1024,
+    :ram => 3072,
     :sshd_config => "#{dir}/artefacts/scripts/sshd_config.sh",    
     :install_ansible => "#{dir}/artefacts/scripts/install_ansible.sh", 
     :config_ansible => "#{dir}/artefacts/scripts/config_ansible.sh",
     :source =>  "#{dir}/artefacts/.",
-    :destination => "/home/vagrant/"
+    :destination => "/home/vagrant/",
+    :guest_g => 80,
+    :host_g => 9080,
+    :sguest_g => 443,
+    :shost_g => 9443,
+    :guest_j => 8080,
+    :host_j => 8080
   }
 ]
  
@@ -95,7 +63,7 @@ Vagrant.configure(2) do |config|
 
         if machine[:guest_j].to_s then
           node.vm.network "forwarded_port", guest: machine[:guest_j].to_s , host: machine[:host_j].to_s
-          node.vm.network "forwarded_port", guest: machine[:sguest_j].to_s , host: machine[:shost_j].to_s
+#          node.vm.network "forwarded_port", guest: machine[:sguest_j].to_s , host: machine[:shost_j].to_s
         end
 
         if File.exist? machine[:sshd_config].to_s then
