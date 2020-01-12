@@ -3,8 +3,18 @@
   hosts: all
   become: true
 
-#- import_playbook: install_java.yaml
-#- import_playbook: install_docker.yaml
-#- import_playbook: install_jenkins.yaml
-#- import_playbook: install_gitlab.yaml
+  vars:
+    # The URL where Rundeck will be served on:
+    rundeck_port: 4440
+    rundeck_address: "{{ ansible_all_ipv4_addresses | default('127.0.0.1') }}"
+    rundeck_server_web_context: /
+    rundeck_url: "http://{{ rundeck_address }}:{{ rundeck_port }}{{ rundeck_server_web_context }}"
+    rundeck_config:
+        - parameter: grails.serverURL
+          value: "{{ rundeck_url }}"    
+
+- import_playbook: install_java.yaml
+- import_playbook: install_docker.yaml
+- import_playbook: install_jenkins.yaml
+- import_playbook: install_gitlab.yaml
 - import_playbook: install_rundeck.yaml
