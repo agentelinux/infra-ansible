@@ -69,9 +69,9 @@ Vagrant.configure(2) do |config|
 #          node.vm.network "forwarded_port", guest: machine[:sguest_j].to_s , host: machine[:shost_j].to_s
         end
 
-        if File.exist? machine[:sshd_config].to_s then
-          node.vm.provision :shell, path: machine[:sshd_config]
-        end
+#        if File.exist? machine[:sshd_config].to_s then
+#          node.vm.provision :shell, path: machine[:sshd_config]
+#        end
         
         if File.exist? machine[:install_ansible].to_s then
           node.vm.provision :shell, path: machine[:install_ansible]
@@ -79,10 +79,17 @@ Vagrant.configure(2) do |config|
 
         if File.exist? machine[:config_ansible].to_s then
             node.vm.provision :file, source: machine[:source] , destination: machine[:destination]
-            node.vm.provision :shell, privileged: false, path: machine[:config_ansible]
+#            node.vm.provision :shell, privileged: false, path: machine[:config_ansible]
         end
       end
 
+    end
+    config.vm.provision :ansible do |ansible|
+      ansible.playbook = "artefacts/playbooks/main.yaml"
+      ansible.galaxy_role_file = "artefacts/playbooks/requirements.yaml"
+      ansible.galaxy_command = "ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path}"
+    
+      ansible.verbose = true
     end
   end
 end

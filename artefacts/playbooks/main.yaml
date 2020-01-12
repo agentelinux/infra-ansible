@@ -2,9 +2,14 @@
 - name: Install DevOPS
   hosts: all
   become: true
+  gather_facts: yes
+
+#  vars_files:
+#    - defaults/main.yml
 
   vars:
     # The URL where Rundeck will be served on:
+    roles_path: artefacts/playbooks/roles
     rundeck_port: 4440
     rundeck_address: "{{ ansible_all_ipv4_addresses | default('127.0.0.1') }}"
     rundeck_server_web_context: /
@@ -12,10 +17,6 @@
     rundeck_config:
         - parameter: grails.serverURL
           value: "{{ rundeck_url }}"    
-
-  tasks:
-    - name: Install Tasks Galaxy
-      import_tasks: install_galaxy.yaml
 
 - name: Install playbooks Java
   import_playbook: install_java.yaml

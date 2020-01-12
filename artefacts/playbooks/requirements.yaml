@@ -1,0 +1,6 @@
+- src: geerlingguy.jenkins   
+- src: geerlingguy.gitlab   
+- src: geerlingguy.pip   
+- src: geerlingguy.docker   
+- src: robertdebock.service   
+- src: robertdebock.rundeck   
