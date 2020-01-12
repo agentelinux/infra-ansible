@@ -1,6 +1,7 @@
-- hosts: jenkins
-  vars:
-    jenkins_hostname: jenkins.example.com
+---
+- name: Install Java
+  hosts: ansible
+  become: true
   roles:
-    - role: geerlingguy.jenkins
+    - role: geerlingguy.java
       become: yes

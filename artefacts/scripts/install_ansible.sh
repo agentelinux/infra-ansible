@@ -8,12 +8,12 @@ apt-add-repository ppa:ansible/ansible -y
 # Install Ansible.
 #apt-get update
 apt-get install ansible -y
-ansible-galaxy install ansiblebit.oracle-java
+ansible-galaxy install geerlingguy.java
 ansible-galaxy install geerlingguy.jenkins
 ansible-galaxy install geerlingguy.gitlab
+ansible-galaxy install geerlingguy.pip
 ansible-galaxy install geerlingguy.docker
-ansible-galaxy install geerlingguy.rundeck
-
+ansible-galaxy install robertdebock.rundeck
 
 # Install expect, dos2unix & tree
 apt-get install expect -y 
