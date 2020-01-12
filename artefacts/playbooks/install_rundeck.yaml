@@ -1,8 +1,9 @@
 ---
 - name: Install Rundeck
-  hosts: ansible
+  hosts: all
   become: true
   gather_facts: yes
+
   roles:
     - role: robertdebock.rundeck
       become: yes

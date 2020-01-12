@@ -1,0 +1,10 @@
+---
+- name: Install DevOPS
+  hosts: all
+  become: true
+
+#- import_playbook: install_java.yaml
+#- import_playbook: install_docker.yaml
+#- import_playbook: install_jenkins.yaml
+#- import_playbook: install_gitlab.yaml
+- import_playbook: install_rundeck.yaml

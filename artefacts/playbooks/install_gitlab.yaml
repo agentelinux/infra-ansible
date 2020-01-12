@@ -1,6 +1,6 @@
 ---
 - name: Install Gitlab
-  hosts: ansible
+  hosts: all
   become: true
   roles:
     - role: geerlingguy.gitlab
