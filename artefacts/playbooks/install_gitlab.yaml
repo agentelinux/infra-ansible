@@ -3,16 +3,7 @@
   hosts: gitlab
   become: true
 
-  vars:
-    sshd_config: /etc/ssh/sshd_config
-
   tasks:
-    - name: Run update sshd_config
-      shell: sed -i "s/.*PasswordAuthentication.*/PasswordAuthentication yes/g" {{ sshd_config }}
-
-    - name: restart ssh server
-      service: name=ssh state=restarted
-
     - name: Checking to make sure postfix is installed
       apt:
         name:

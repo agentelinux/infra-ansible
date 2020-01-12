@@ -1,6 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 # Use config.yaml for basic VM configuration.
+# vagrant plugin install vagrant-disksize
+# vagrant plugin install vagrant-dns
 
 require 'yaml'
 dir = File.dirname(File.expand_path(__FILE__))
@@ -43,6 +45,7 @@ Vagrant.configure(2) do |config|
       node.dns.patterns = machine[:hostname]
       node.vm.box = vconfig['vagrant_box']
       node.vm.box_version = vconfig['vagrant_box_version']
+      node.disksize.size = '90GB'
       node.vm.hostname = machine[:hostname]
       node.vm.network "private_network", ip: machine[:ip] 
 

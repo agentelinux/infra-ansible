@@ -1,13 +1,19 @@
 #!/bin/sh
 
 # Install Ansible repository.
-apt -y update && apt-get -y upgrade
+apt -y update #&& apt-get -y upgrade
 apt-get install software-properties-common
 apt-add-repository ppa:ansible/ansible -y
 
 # Install Ansible.
-apt-get update
+#apt-get update
 apt-get install ansible -y
+ansible-galaxy install ansiblebit.oracle-java
+ansible-galaxy install geerlingguy.jenkins
+ansible-galaxy install geerlingguy.gitlab
+ansible-galaxy install geerlingguy.docker
+ansible-galaxy install geerlingguy.rundeck
+
 
 # Install expect, dos2unix & tree
 apt-get install expect -y 
@@ -35,13 +41,13 @@ echo "vagrant        ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers
 sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers
 
 # Change to enable any user
-#sed -i "s/.*PasswordAuthentication.*/PasswordAuthentication yes/g" /etc/ssh/sshd_config
+sed -i "s/.*PasswordAuthentication.*/PasswordAuthentication yes/g" /etc/ssh/sshd_config
 
 # Restart sshd
-#service restart ssh
+service restart ssh
 
 # Disable daily apt unattended updates.
-#echo 'APT::Periodic::Enable "0";' >> /etc/apt/apt.conf.d/10periodic
+echo 'APT::Periodic::Enable "0";' >> /etc/apt/apt.conf.d/10periodic
 
 # generating password configuration on ansible server to later access remote servers
 echo vagrant | sudo -S su - vagrant -c "ssh-keygen -t rsa -f /home/vagrant/.ssh/id_rsa -q -P ''"

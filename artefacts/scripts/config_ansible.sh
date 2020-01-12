@@ -53,7 +53,8 @@ echo "ansible.sample.test" | sudo tee -a /etc/ansible/hosts
 
 echo " " | sudo tee -a /etc/ansible/hosts
 echo "[gitlab]" | sudo tee -a /etc/ansible/hosts
-echo "gitlab.sample.test" | sudo tee -a /etc/ansible/hosts
+#echo "gitlab.sample.test" | sudo tee -a /etc/ansible/hosts
+echo "ansible.sample.test" | sudo tee -a /etc/ansible/hosts 
 
 #cat /etc/ansible/hosts
 dos2unix /vagrant/artefacts/scripts/ssh_pass.sh
@@ -70,9 +71,9 @@ chmod +x /vagrant/artefacts/scripts/ssh_pass.sh
 
 #ansible-playbook /vagrant/artefacts/playbooks/nfs_server.yaml
 #ansible-playbook /vagrant/artefacts/playbooks/nfs_clients.yaml
-ansible-playbook /vagrant/artefacts/playbooks/install_java.yaml
-ansible-playbook /vagrant/artefacts/playbooks/install_jenkins.yaml
-ansible-playbook /vagrant/artefacts/playbooks/install_docker.yaml
-ansible-playbook /vagrant/artefacts/playbooks/install_gitlab.yaml
+#ansible-playbook /vagrant/artefacts/playbooks/install_java.yaml
+#ansible-playbook /vagrant/artefacts/playbooks/install_jenkins.yaml
+#ansible-playbook /vagrant/artefacts/playbooks/install_docker.yaml
+#ansible-playbook /vagrant/artefacts/playbooks/install_gitlab.yaml
 
 
