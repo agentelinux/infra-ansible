@@ -7,5 +7,6 @@
       become: yes
 
   tasks:
+
   - name: SET IPV4
     shell: echo "export _JAVA_OPTIONS=-Djava.net.preferIPv4Stack=true" > /etc/profile.d/java.sh 

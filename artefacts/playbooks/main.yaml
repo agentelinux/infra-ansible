@@ -13,8 +13,21 @@
         - parameter: grails.serverURL
           value: "{{ rundeck_url }}"    
 
-- import_playbook: install_java.yaml
-- import_playbook: install_docker.yaml
-- import_playbook: install_jenkins.yaml
-- import_playbook: install_gitlab.yaml
-- import_playbook: install_rundeck.yaml
+  tasks:
+    - name: Install Tasks Galaxy
+      import_tasks: install_galaxy.yaml
+
+- name: Install playbooks Java
+  import_playbook: install_java.yaml
+
+- name: Install playbooks Docker
+  import_playbook: install_docker.yaml
+
+- name: Install playbooks Jenkins
+  import_playbook: install_jenkins.yaml
+
+- name: Install playbooks Gitlab
+  import_playbook: install_gitlab.yaml
+
+- name: Install playbooks Rundeck
+  import_playbook: install_rundeck.yaml
