@@ -1,8 +1,0 @@
----
-- name: Install Gitlab
-  hosts: all
-  become: true
-  roles:
-    - role: geerlingguy.gitlab
-      become: yes
-  

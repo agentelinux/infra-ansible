@@ -1,0 +1,35 @@
+version: '2'
+services:
+    jenkins:
+        container_name: jenkins
+        image: jenkins/jenkins
+        ports:
+            - "8090:8080"
+            - "50000:50000"
+        volumes:
+            - /var/devops/jenkins:/var/jenkins_home
+            - /var/run/docker.sock:/var/run/docker.sock
+            - /usr/bin/docker:/usr/bin/docker
+        privileged: true
+
+    rundeck:
+        container_name: rundeck
+        image: rundeck/rundeck:3.1.2
+        ports:
+            - 4440:4440
+        environment:
+            - SERVER_URL=http://ansible.sample.test:4440
+            - RUNDECK_PASSWORD=lite-nard-guardian-woke-pageboy
+        volumes:
+            - /var/devops/rundeck:/var/rundeck/projects:rw
+            - /var/devops/rundeck-keys:/var/lib/rundeck_ssh:ro
+
+    gogs:
+        container_name: gogs
+        image: gogs/gogs
+        ports:
+            - "10080:3000"
+            - "10022:22"
+        volumes:
+            - /var/devops/gogs:/data
+        privileged: true

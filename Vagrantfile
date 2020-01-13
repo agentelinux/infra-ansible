@@ -18,36 +18,46 @@ DOMAIN = vconfig['vagrant_domain_name']
 RAM = vconfig['vagrant_memory']
 TLD = vconfig['vagrant_dns_tld']
 
+$install_ansible = <<SCRIPT
+apt-get -y install software-properties-common
+apt-add-repository ppa:ansible/ansible
+apt-get -y update
+apt-get -y install ansible
+
+SCRIPT
+
 servers=[
   {
     :hostname => "ansible." + "#{DOMAIN}",
     :ip => "#{BRIDGE_NET}" + "155",
-    :ram => 3072,
+    :ram => 4096,
     :sshd_config => "#{dir}/artefacts/scripts/sshd_config.sh",    
     :install_ansible => "#{dir}/artefacts/scripts/install_ansible.sh", 
     :config_ansible => "#{dir}/artefacts/scripts/config_ansible.sh",
     :source =>  "#{dir}/artefacts/.",
-    :destination => "/home/vagrant/",
-    :guest_g => 80,
-    :host_g => 9080,
-    :sguest_g => 443,
-    :shost_g => 9443,
-    :guest_j => 8080,
-    :host_j => 8080
+    :destination => "/home/vagrant/"
   }
 ]
  
 Vagrant.configure(2) do |config|
   config.vm.synced_folder ".", vconfig['vagrant_directory'], :mount_options => ["dmode=777", "fmode=755"]
+  config.vm.provision 'shell', inline: $install_ansible
   servers.each do |machine|
     config.vm.define machine[:hostname] do |node|
       node.dns.tld = TLD
       node.dns.patterns = machine[:hostname]
       node.vm.box = vconfig['vagrant_box']
       node.vm.box_version = vconfig['vagrant_box_version']
-      node.disksize.size = '90GB'
+      node.disksize.size = '80GB'
       node.vm.hostname = machine[:hostname]
       node.vm.network "private_network", ip: machine[:ip] 
+
+      node.vm.network "forwarded_port", guest: 8090 , host: 8090
+      node.vm.network "forwarded_port", guest: 8080 , host: 8080
+      node.vm.network "forwarded_port", guest: 8443 , host: 8443
+      node.vm.network "forwarded_port", guest: 4440 , host: 4440
+      node.vm.network "forwarded_port", guest: 10080 , host: 10080
+      node.vm.network "forwarded_port", guest: 10022 , host: 10022
 
       node.vm.provider "virtualbox" do |vb,override|
         vb.gui = false
@@ -58,28 +68,9 @@ Vagrant.configure(2) do |config|
       end
 
       if (!machine[:hostname].nil?) then
-
-        if machine[:guest_g].to_s then
-          node.vm.network "forwarded_port", guest: machine[:guest_g].to_s , host: machine[:host_g].to_s
-          node.vm.network "forwarded_port", guest: machine[:sguest_g].to_s , host: machine[:shost_g].to_s
-        end
-
-        if machine[:guest_j].to_s then
-          node.vm.network "forwarded_port", guest: machine[:guest_j].to_s , host: machine[:host_j].to_s
-#          node.vm.network "forwarded_port", guest: machine[:sguest_j].to_s , host: machine[:shost_j].to_s
-        end
-
-#        if File.exist? machine[:sshd_config].to_s then
-#          node.vm.provision :shell, path: machine[:sshd_config]
-#        end
         
-        if File.exist? machine[:install_ansible].to_s then
-          node.vm.provision :shell, path: machine[:install_ansible]
-        end
-
         if File.exist? machine[:config_ansible].to_s then
             node.vm.provision :file, source: machine[:source] , destination: machine[:destination]
-#            node.vm.provision :shell, privileged: false, path: machine[:config_ansible]
         end
       end
 
@@ -89,7 +80,7 @@ Vagrant.configure(2) do |config|
       ansible.galaxy_role_file = "artefacts/playbooks/requirements.yaml"
       ansible.galaxy_command = "ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path}"
     
-      ansible.verbose = true
+      #ansible.verbose = true
     end
   end
 end

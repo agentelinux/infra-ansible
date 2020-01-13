@@ -1,34 +1,43 @@
 ---
 - name: Install DevOPS
-  hosts: all
+  hosts: all, localhost
   become: true
   gather_facts: yes
-
-#  vars_files:
-#    - defaults/main.yml
 
   vars:
     # The URL where Rundeck will be served on:
     roles_path: artefacts/playbooks/roles
-    rundeck_port: 4440
-    rundeck_address: "{{ ansible_all_ipv4_addresses | default('127.0.0.1') }}"
-    rundeck_server_web_context: /
-    rundeck_url: "http://{{ rundeck_address }}:{{ rundeck_port }}{{ rundeck_server_web_context }}"
-    rundeck_config:
-        - parameter: grails.serverURL
-          value: "{{ rundeck_url }}"    
+    docker_install_compose: true
+    pip_install_packages:
+      - name: docker
+      - name: docker-compose
 
-- name: Install playbooks Java
-  import_playbook: install_java.yaml
+  roles:
+    - geerlingguy.pip
+    - geerlingguy.docker
 
-- name: Install playbooks Docker
-  import_playbook: install_docker.yaml
+  tasks:
 
-- name: Install playbooks Jenkins
-  import_playbook: install_jenkins.yaml
+    - name: 'add users to docker group'
+      user:
+        name: 'vagrant'
+        groups: 'docker'
+        append: 'yes'
 
-- name: Install playbooks Gitlab
-  import_playbook: install_gitlab.yaml
+    - name: Volume Dockers
+      file:
+        path: "/var/devops/{{item}}"
+        owner: root
+        group: vagrant
+        mode: 0775
+        recurse: yes
+        state: directory
+      with_items: ["jenkins", "rundeck","rundeck-keys", "gitlab","gitgogs"]
 
-- name: Install playbooks Rundeck
-  import_playbook: install_rundeck.yaml
+    
+    - name: Create and start services
+      docker_compose:
+        project_src: /vagrant/artefacts/containers
+        files:
+          - docker-compose.yml 
+

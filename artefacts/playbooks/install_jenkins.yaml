@@ -1,8 +1,0 @@
----
-- name: Install Jenkins
-  hosts: all
-  become: true
-
-  roles:
-    - role: geerlingguy.jenkins
-      become: yes
