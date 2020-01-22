@@ -33,3 +33,16 @@ services:
         volumes:
             - /var/devops/gogs:/data
         privileged: true
+
+    gitlab:
+        container_name: gitlab
+        image: gitlab-ce:latest
+        ports:
+            - "9443:443"
+            - "9080:80"
+            - "10024:22"
+        volumes:
+            - /var/devops/gitlab/config:/etc/gitlab \
+            - /var/devops/gitlab/logs:/var/log/gitlab \
+            - /var/devops/gitlab/data:/var/opt/gitlab \
+        privileged: true

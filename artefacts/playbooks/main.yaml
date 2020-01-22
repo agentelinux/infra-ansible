@@ -26,6 +26,18 @@
         - python3-pip
         - docker
 
+    - name: Install Docker
+      apt: name=docker state=latest
+
+    - name: Install Boto
+      apt: name=python3-boto state=latest
+
+    - name: Install Boto3
+      apt: name=python3-boto3 state=latest
+
+    - name: Install Docker Compose
+      apt: name=docker-compose state=latest
+
     - name: 3 - Habilitando Docker CE service no start da máquina
       service:
         name: docker
